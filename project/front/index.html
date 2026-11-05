@@ -11,6 +11,16 @@
   <body onload="obterFilmes()">
     <div class="container mt-5">
 
+        <!-- alerta de preencher todos os campos -->
+        <div class="row-justify-content-center">
+          <div class="col-md-8">
+            <div class="d-none alert alert-danger alert-dismissible" role="alert">Preencha todos os campos.
+              <button type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- input de titulo do filme -->
         <div class="row justify-content-center">
           <div class="col-md-8 col-lg-4">
             <div class="form-floating mb-3">
@@ -18,6 +28,8 @@
               <label for="tituloInput">Título do Filme</label>
             </div>
           </div>
+
+          <!-- input de sinopse do filme -->
           <div class="col-md-8 col-lg-4">
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="sinopseInput" placeholder="Sinopse do Filme">
@@ -26,6 +38,7 @@
           </div>
         </div>
 
+        <!-- botao de cadastrar o filme -->
         <div class="row justify-content-center">
           <div class="col-md-8">
             <button class="btn btn-outline-primary w-100" onclick="cadastrarFilme()">
@@ -34,6 +47,7 @@
           </div>
         </div>
 
+        <!-- tabela dos filmes/sinopse -->
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <table class="table table-striped table-hover text-center filmes">
@@ -55,6 +69,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <script src="js/scripts.js"></script>
+    <script src="js/frontend.js"></script>
   </body>
 </html>
