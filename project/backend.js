@@ -3,6 +3,7 @@ const cors = require ('cors')
 const mongoose = require ('mongoose')
 const uniqueValidator = require ('mongoose-unique-validator').default
 const bcrypt = require ('bcrypt')
+const jwt = require ('jsonwebtoken')
 
 const app = express()
 app.use(express.json())
@@ -52,6 +53,7 @@ app.post ('/filmes', async (req, res) => {
     let titulo = req.body.titulo // pega oq o usuario digita
     let sinopse = req.body.sinopse
     let filme = new Filme({titulo: titulo, sinopse: sinopse}) // cria um objeto filme com os dados do usuario
+    
     await filme.save() // salva o filme no banco de dados
     const filmes = await Filme.find() // pega todos os filmes do banco
     res.json(filmes)
@@ -63,14 +65,39 @@ app.post('/signup', async (req, res) => {
         let login = req.body.login
         let password = req.body.password
         const hashedPassword = await bcrypt.hash(password, 10)
+
         let usuario = new Usuario({ login: login, password: hashedPassword })
+
         const responseMongo = await usuario.save()
+
         console.log(responseMongo)
         res.status(201).end()
     } catch (error) {
         console.log(error)
-        res.status(400).end()
+        res.status(409).end()
     }
+})
+
+// POST - http://localhost:3000/login
+app.post('/login', async (req, res) => {
+    const login = req.body.login
+    const password = req.body.password
+    const usuario = await Usuario.findOne({login: login})
+    if (!usuario) {
+        return res.status(401).json({mensagem: 'Usuário inválido'})
+    }
+
+    const senhaValida = await bcrypt.compare(password, usuario.password)
+    if (!senhaValida) {
+        return res.status(401).json({mensagem: 'Senha inválida'})
+    }
+
+    const token = jwt.sign(
+        {login: login},
+        'chave',
+        {expiresIn: '1h'}
+    )
+    res.status(200).json({token: token})
 })
 
 app.listen(3000, async () => {
